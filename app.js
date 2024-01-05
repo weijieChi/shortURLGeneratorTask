@@ -15,3 +15,11 @@ app.set('views', './views')
 
 // express static file service
 app.use(express.static('public'))
+
+app.get('/', (req, res) => {
+  res.render('index')
+})
+
+app.listen(port, () => {
+  console.log(`server on localhost:${port}`)
+})
