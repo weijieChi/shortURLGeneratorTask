@@ -21,12 +21,22 @@ app.set('views', './views')
 // express static file service
 app.use(express.static('public'))
 
+// golbal function
+function getRandomString() {
+  const Characters = 'abcdefghijklmnopqrstuvwxyz0123456789'
+  let randomString = ''
+  for (let i = 0; i < 5; i++) {
+    randomString += Characters[Math.floor(Math.random() * Characters.length)]
+  }
+  return randomString
+}
+
 app.get('/', (req, res) => {
   res.render('index')
 })
 
 app.post('/submit', (req, res) => {
-  const data = req.body
+  const data = req.body.urlstring
   console.log(data)
 
 })
