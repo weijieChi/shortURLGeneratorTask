@@ -36,9 +36,60 @@ app.get('/', (req, res) => {
 })
 
 app.post('/submit', (req, res) => {
-  const data = req.body.urlstring
-  console.log(data)
+  const reqUrlString = req.body.urlstring
+  function readShortUrlsData() {
+    return new Promise((resolve, reject) => {
+      fs.readFile('./public/jsons/shortUrls.json', (err, data) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(JSON.parse(data.toString()))
+      })
+    })
+  }
 
+  function writeShortUrlsData(stringData) {
+    return new Promise((resolve, reject) => {
+      fs.writeFile('./public/jsons/shortUrls.json', stringData, (err) => {
+        if (err) reject(err)
+        resolve('write successfully')
+      })
+    })
+  }
+
+  async function getShortUrlsFileData() {
+    try {
+      let shortUrls = await readShortUrlsData()
+      if (shortUrls.results.findIndex(element => element.source === reqUrlString) !== -1) {
+        // ... do something
+        // req
+        res.send('have same url')
+        return
+      }
+
+      let randomString = ''
+      // 防止出現相同的短網址
+      do {
+        randomString = getRandomString()
+      }
+      while (shortUrls.results.findIndex(element => element.shortString === randomString) !== -1)
+      // 建立物件
+      const shortUrlData = {
+        source: reqUrlString,
+        shortString: randomString
+      }
+
+      shortUrls.results.push(shortUrlData)
+
+      // 寫回到 ./public/jsons/shortUrls.json 檔案裡
+      const shortUrsDataString = JSON.stringify(shortUrls)
+      await writeShortUrlsData(shortUrsDataString)
+    }
+    catch (err) {
+      console.error('catch:', err)
+    }
+  }
+  getShortUrlsFileData()
 })
 
 app.listen(port, () => {
