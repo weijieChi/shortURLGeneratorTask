@@ -64,7 +64,7 @@ app.post('/submit', (req, res) => {
         // ... do something
         // req
         res.send('have same url')
-        return
+        return // res() 好像並不會停止程式碼跳出 function ，所以加上 return
       }
 
       let randomString = ''
@@ -84,6 +84,7 @@ app.post('/submit', (req, res) => {
       // 寫回到 ./public/jsons/shortUrls.json 檔案裡
       const shortUrsDataString = JSON.stringify(shortUrls)
       await writeShortUrlsData(shortUrsDataString)
+      res.render('your-short-link', { shortUrlData })
     }
     catch (err) {
       console.error('catch:', err)
