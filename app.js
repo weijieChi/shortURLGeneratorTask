@@ -2,6 +2,7 @@
 
 const express = require('express')
 const fs = require('fs')
+const path = require('path')
 
 // use template engine  "express-handlebars"
 const { engine } = require('express-handlebars')
@@ -62,8 +63,10 @@ app.post('/submit', (req, res) => {
       let shortUrls = await readShortUrlsData()
       if (shortUrls.results.findIndex(element => element.source === reqUrlString) !== -1) {
         // ... do something
+        // 輸入相同網址在這裡處理
+        const shortUrlData = shortUrls.results.find(element => element.source === shortUrls)
+        res.render('your-short-link', { shortUrlData })
         // req
-        res.send('have same url')
         return // res() 好像並不會停止程式碼跳出 function ，所以加上 return
       }
 
