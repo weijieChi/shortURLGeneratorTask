@@ -66,7 +66,6 @@ app.post('/submit', (req, res) => {
         // ... do something
         // 輸入相同網址在這裡處理
         const shortUrlData = shortUrls.results[shortUrlsIndex]
-        console.log(shortUrlData)
         res.render('your-short-link', { shortUrlData })
         // req
         return // res() 好像並不會停止程式碼跳出 function ，所以加上 return
