@@ -4,9 +4,9 @@
 async function writeToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text)
-    alert('內容已經複製')
+    alert('Your link has been copied!')
   } catch (error) {
-    alert(error, '您的瀏覽器可能不支援剪貼簿複製功能')
+    alert(error, 'Your browser may not support clipboard copying')
     console.error(error)
   }
 }
