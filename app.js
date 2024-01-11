@@ -32,6 +32,27 @@ function getRandomString() {
   }
   return randomString
 }
+
+function readShortUrlsData() {
+  return new Promise((resolve, reject) => {
+    fs.readFile('./public/jsons/shortUrls.json', (err, data) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(JSON.parse(data.toString()))
+    })
+  })
+}
+
+function writeShortUrlsData(stringData) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile('./public/jsons/shortUrls.json', stringData, (err) => {
+      if (err) reject(err)
+      resolve('write successfully')
+    })
+  })
+}
+
 // index
 app.get('/', (req, res) => {
   res.render('index')
@@ -41,26 +62,6 @@ app.post('/submit', (req, res) => {
   const reqUrlString = req.body.urlstring
   // console.log(reqUrlString)
   // console.log(isUrlHttp(reqUrlString))
-
-  function readShortUrlsData() {
-    return new Promise((resolve, reject) => {
-      fs.readFile('./public/jsons/shortUrls.json', (err, data) => {
-        if (err) {
-          reject(err)
-        }
-        resolve(JSON.parse(data.toString()))
-      })
-    })
-  }
-
-  function writeShortUrlsData(stringData) {
-    return new Promise((resolve, reject) => {
-      fs.writeFile('./public/jsons/shortUrls.json', stringData, (err) => {
-        if (err) reject(err)
-        resolve('write successfully')
-      })
-    })
-  }
 
   async function getShortUrlsFileData() {
     try {
@@ -108,9 +109,15 @@ app.post('/submit', (req, res) => {
   }
 })
 
-// app.get('/:', (req, res) ={
+app.get('/:str', (req, res) => {
+  const shorString = req.params.str.trim()
+  if (shorString.length === 0) {
+    res.redirect('/')
+  } else (
 
-// })
+  )
+
+})
 
 app.listen(port, () => {
   console.log(`server on http://localhost:${port}`)

@@ -16,7 +16,7 @@ function isValidHttpUrl(urlString) {
 urlForm.addEventListener('submit', (submitEvent) => {
   submitEvent.preventDefault()
   const urlString = document.querySelector('#url-string').value.trim()
-  if (urlString === '') {
+  if (urlString.length === 0) {
     alert('Please enter URL string')
   }
   else if (isValidHttpUrl(urlString)) {
