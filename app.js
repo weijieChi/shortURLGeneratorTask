@@ -32,7 +32,7 @@ function getRandomString() {
   }
   return randomString
 }
-
+// index
 app.get('/', (req, res) => {
   res.render('index')
 })
@@ -106,8 +106,11 @@ app.post('/submit', (req, res) => {
   } else {
     res.sendStatus(400).send('{"status": "HTTP 400", "message": "Bad Request Error"}')
   }
-
 })
+
+// app.get('/:', (req, res) ={
+
+// })
 
 app.listen(port, () => {
   console.log(`server on http://localhost:${port}`)
