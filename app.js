@@ -2,7 +2,8 @@
 
 const express = require('express')
 const fs = require('fs')
-const path = require('path')
+const isUrlHttp = require('is-url-http')
+// const path = require('path')
 
 // use template engine  "express-handlebars"
 const { engine } = require('express-handlebars')
@@ -38,6 +39,9 @@ app.get('/', (req, res) => {
 
 app.post('/submit', (req, res) => {
   const reqUrlString = req.body.urlstring
+  // console.log(reqUrlString)
+  // console.log(isUrlHttp(reqUrlString))
+
   function readShortUrlsData() {
     return new Promise((resolve, reject) => {
       fs.readFile('./public/jsons/shortUrls.json', (err, data) => {
@@ -94,7 +98,15 @@ app.post('/submit', (req, res) => {
       console.error('catch:', err)
     }
   }
-  getShortUrlsFileData()
+
+  // 程式執行位置
+  // 後端 URL 規則判斷
+  if (isUrlHttp(reqUrlString)) {
+    getShortUrlsFileData()
+  } else {
+    res.sendStatus(400).send('{"status": "HTTP 400", "message": "Bad Request Error"}')
+  }
+
 })
 
 app.listen(port, () => {

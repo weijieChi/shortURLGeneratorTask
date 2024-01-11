@@ -15,8 +15,11 @@ function isValidHttpUrl(urlString) {
 // from end URL validate
 urlForm.addEventListener('submit', (submitEvent) => {
   submitEvent.preventDefault()
-  const urlString = document.querySelector('#url-string').value
-  if (isValidHttpUrl(urlString)) {
+  const urlString = document.querySelector('#url-string').value.trim()
+  if (urlString === '') {
+    alert('Please enter URL string')
+  }
+  else if (isValidHttpUrl(urlString)) {
     urlForm.submit()
   } else {
     alert('The URL you entered does not comply with the rules.')
