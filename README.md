@@ -32,7 +32,7 @@ npm install
 ```
 4. 透過 npm 執行伺服器程式。
 ```sh
-npm run dev
+npm run start
 ```
 5. 在瀏覽器網址列輸入 `http://localhost:3000/` 就可以打開網頁了
 6. 最後要關閉伺服器就在 terminal 案 `ctrl` + `C` 再按 `y` + `enter` 關閉 nodejs 伺服器。
