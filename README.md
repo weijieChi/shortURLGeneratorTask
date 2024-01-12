@@ -10,6 +10,7 @@
 
 ## Environment Requirement 環境需求
 * 必須已經安裝 Nodejs 執行環境
+* nodemon
 * git 套件
 
 ## Execution 執行方式
