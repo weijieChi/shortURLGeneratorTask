@@ -1,0 +1,9 @@
+html body {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-family: 'Lato', sans-serif;
+}
+
+img {
+  max-width: 50%;
+  height: auto;
+}
