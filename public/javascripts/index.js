@@ -8,6 +8,7 @@ function isValidHttpUrl(urlString) {
     const newUrl = new URL(urlString);
     return newUrl.protocol === 'http:' || newUrl.protocol === 'https:';
   } catch (err) {
+    console.error(err)
     return false;
   }
 }
