@@ -8,6 +8,7 @@ function isValidHttpUrl(urlString) {
     const newUrl = new URL(urlString);
     return newUrl.protocol === 'http:' || newUrl.protocol === 'https:';
   } catch (err) {
+    console.error(err)
     return false;
   }
 }
@@ -16,7 +17,7 @@ function isValidHttpUrl(urlString) {
 urlForm.addEventListener('submit', (submitEvent) => {
   submitEvent.preventDefault()
   const urlString = document.querySelector('#url-string').value.trim()
-  if (urlString === '') {
+  if (urlString.length === 0) {
     alert('Please enter URL string')
   }
   else if (isValidHttpUrl(urlString)) {

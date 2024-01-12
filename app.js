@@ -33,6 +33,27 @@ function getRandomString() {
   return randomString
 }
 
+function readShortUrlsData() {
+  return new Promise((resolve, reject) => {
+    fs.readFile('./public/jsons/shortUrls.json', (err, data) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(JSON.parse(data.toString()))
+    })
+  })
+}
+
+function writeShortUrlsData(stringData) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile('./public/jsons/shortUrls.json', stringData, (err) => {
+      if (err) reject(err)
+      resolve('write successfully')
+    })
+  })
+}
+
+// index
 app.get('/', (req, res) => {
   res.render('index')
 })
@@ -41,26 +62,6 @@ app.post('/submit', (req, res) => {
   const reqUrlString = req.body.urlstring
   // console.log(reqUrlString)
   // console.log(isUrlHttp(reqUrlString))
-
-  function readShortUrlsData() {
-    return new Promise((resolve, reject) => {
-      fs.readFile('./public/jsons/shortUrls.json', (err, data) => {
-        if (err) {
-          reject(err)
-        }
-        resolve(JSON.parse(data.toString()))
-      })
-    })
-  }
-
-  function writeShortUrlsData(stringData) {
-    return new Promise((resolve, reject) => {
-      fs.writeFile('./public/jsons/shortUrls.json', stringData, (err) => {
-        if (err) reject(err)
-        resolve('write successfully')
-      })
-    })
-  }
 
   async function getShortUrlsFileData() {
     try {
@@ -71,7 +72,6 @@ app.post('/submit', (req, res) => {
         // 輸入相同網址在這裡處理
         const shortUrlData = shortUrls.results[shortUrlsIndex]
         res.render('your-short-link', { shortUrlData })
-        // req
         return // res() 好像並不會停止程式碼跳出 function ，所以加上 return
       }
 
@@ -104,9 +104,36 @@ app.post('/submit', (req, res) => {
   if (isUrlHttp(reqUrlString)) {
     getShortUrlsFileData()
   } else {
-    res.sendStatus(400).send('{"status": "HTTP 400", "message": "Bad Request Error"}')
+    res.status(400)
+  }
+})
+// 短網址轉原始網址
+app.get('/:str', (req, res) => {
+  const shorLinkString = req.params.str.trim()
+  if (shorLinkString.length === 0) {
+    res.redirect('/')
+    return
   }
 
+  async function redirectShortLink() {
+    try {
+      const shortUrls = await readShortUrlsData()
+      const index = shortUrls.results.findIndex(shortUrl => shortUrl.shortString === shorLinkString)
+      if (index === -1) {
+        res.status(404).render('notfound', { layout: false })
+        // res.statusCode(404)
+        // res.sendStatus(404)
+        return
+      }
+      const sourceUrs = shortUrls.results[index].source
+      res.redirect(sourceUrs)
+    } catch (err) {
+      console.log('on route /:str redirect error')
+      console.error('catch:', err)
+      // res.sendStatus(500)
+    }
+  }
+  redirectShortLink()
 })
 
 app.listen(port, () => {
